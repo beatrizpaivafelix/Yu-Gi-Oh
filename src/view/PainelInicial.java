@@ -1,11 +1,11 @@
 package view;
 
 import controller.UsuarioController;
-
+import model.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class PainelInicial extends JPanel {
 
@@ -64,7 +64,7 @@ public class PainelInicial extends JPanel {
                 JOptionPane.showMessageDialog(tela, "ERRO: Preencha ambos os campos", "ERRO",
                         JOptionPane.ERROR_MESSAGE);
 
-            } else {
+            } else { //Os campos estão preenchidos
                 String resposta = userController.isCadastrado(username); //Informa se o usuário já existe
 
                 if(resposta.equals("SIM")) { //Não pode cadastrar usuário repetido
@@ -76,7 +76,11 @@ public class PainelInicial extends JPanel {
                             "ERRO", JOptionPane.ERROR_MESSAGE);
 
                 } else { //Pode cadastrar
-                    if(this.userController.cadastrar(username, password)) //Tenta cadastrar
+
+                    //Usa a biblioteca externa BCrypt para criptografar a senha
+                    String senhaCriptografada = BCrypt.hashpw(password, BCrypt.gensalt());
+
+                    if(this.userController.cadastrar(username, senhaCriptografada)) //Tenta cadastrar
                         JOptionPane.showMessageDialog(tela, username + " cadastrado com sucesso!", "Sucesso",
                                 JOptionPane.INFORMATION_MESSAGE);
                     else
@@ -92,7 +96,45 @@ public class PainelInicial extends JPanel {
         //Botão de login
         JButton login = new JButton("Entrar");
         login.addActionListener(e -> {
+            //Credenciais do usuário
+            String username = txtUsuario.getText();
+            String password = String.valueOf(txtSenha.getPassword());
 
+            //Verificar se os campos estão preenchidos
+            if(username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(tela, "ERRO: Preencha ambos os campos", "ERRO",
+                        JOptionPane.ERROR_MESSAGE);
+
+            } else { //Os campos estão preenchidos
+                ArrayList<Usuario> usuarios = this.userController.getUsuarios();
+
+                if(usuarios == null) {
+                    JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
+                            "ERRO", JOptionPane.ERROR_MESSAGE);
+
+                } else if(usuarios.isEmpty()) {
+                    JOptionPane.showMessageDialog(tela, "ERRO: não há usuários cadastrados.",
+                            "ERRO", JOptionPane.ERROR_MESSAGE);
+
+                } else { //Há pelo menos um usuário cadastrado
+                    boolean logado = false;
+
+                    //Avalia a senha (criptografada) de todos os usuários
+                    for(Usuario u : usuarios) {
+                        if(username.equalsIgnoreCase(u.getNome()) &&
+                                BCrypt.checkpw(password, u.getSenha())) { //Verifica se as senhas são iguais
+
+                            //Credenciais corretas
+                            logado = true;
+                            this.tela.trocarTela("MENU", new PainelMenu(u, this.tela, this.x, this.y));
+                        }
+                    }
+
+                    if(!logado) //Credenciais incorretas
+                        JOptionPane.showMessageDialog(tela, "ERRO: nome ou senha incorretos",
+                                "ERRO", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
         login.setBounds(xCentralizado, 450, 220, 50);
         login.setFont(new Font("Arial", Font.PLAIN, 30));

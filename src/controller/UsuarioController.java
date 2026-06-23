@@ -1,6 +1,8 @@
 package controller;
 
 import dao.UsuarioDAO;
+import model.Usuario;
+import java.util.ArrayList;
 
 public class UsuarioController {
 
@@ -15,5 +17,7 @@ public class UsuarioController {
     public boolean cadastrar(String username, String password) {
         return userSQL.insertUsuario(username, password);
     }
+
+    public ArrayList<Usuario> getUsuarios() { return userSQL.getUsuarios(); }
 
 }

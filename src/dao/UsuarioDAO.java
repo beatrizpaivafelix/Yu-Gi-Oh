@@ -1,10 +1,13 @@
 package dao;
 
+import model.Usuario;
+
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UsuarioDAO {
 
@@ -26,6 +29,7 @@ public class UsuarioDAO {
         }
     }
 
+    //Registra um usuario no banco
     public boolean insertUsuario(String username, String password) {
         try (Connection conexao = ConexaoMySQL.getConnection()) { //Abre conexão com o banco
 
@@ -41,6 +45,29 @@ public class UsuarioDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return false; //Erro
+        }
+    }
+
+    //Retorna todos os usuarios do banco
+    public ArrayList<Usuario> getUsuarios() {
+        try (Connection conexao = ConexaoMySQL.getConnection()) {
+
+            //Preparando SQL de consulta
+            String sql = "SELECT * FROM usuario;";
+            PreparedStatement statement = conexao.prepareStatement(sql);
+
+            ResultSet resultados = statement.executeQuery();
+            ArrayList<Usuario> retorno = new ArrayList<>();
+
+            while(resultados.next()) {
+                Usuario u = new Usuario(resultados.getString("nome"), resultados.getString("senha"));
+                retorno.add(u);
+            }
+
+            return retorno; //Retorna array com todos os usuarios cadastrados
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return null;
         }
     }
 
