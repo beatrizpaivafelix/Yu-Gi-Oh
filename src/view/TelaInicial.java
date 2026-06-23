@@ -15,9 +15,10 @@ public class TelaInicial extends JFrame {
     private CardLayout baralhoPaineis;
 
     public TelaInicial(String title) {
-        //Inicializa o novo JFrame com um título e define que a operação de encerramento
+        //Inicializa o novo JFrame
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
 
         //Posiciona o JFrame no centro da tela
         Point centro = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
@@ -32,7 +33,8 @@ public class TelaInicial extends JFrame {
         this.painelFundo = new JScrollPane(this.painelPrincipal);
         this.add(this.painelFundo);
 
-        this.trocarTela("INICIAL", new PainelInicial()); //Abre a tela inicial do programa
+        //Abre a tela inicial do programa
+        this.trocarTela("INICIAL", new PainelInicial(this, this.x, this.y));
 
         this.setVisible(true); //Mostra o JFrame pronto
     }
