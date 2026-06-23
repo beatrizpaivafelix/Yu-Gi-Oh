@@ -64,9 +64,25 @@ public class PainelInicial extends JPanel {
                 JOptionPane.showMessageDialog(tela, "ERRO: Preencha ambos os campos", "ERRO",
                         JOptionPane.ERROR_MESSAGE);
 
-            } else if(userController.isCadastrado(username)) { //Verifica se o usuário já está cadastrado
+            } else {
+                String resposta = userController.isCadastrado(username); //Informa se o usuário já existe
 
+                if(resposta.equals("SIM")) { //Não pode cadastrar usuário repetido
+                    JOptionPane.showMessageDialog(tela, "ERRO: " + username + " já está cadastrado",
+                            "ERRO", JOptionPane.ERROR_MESSAGE);
 
+                } else if(resposta.equals("ERRO")) { //SQLException
+                    JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
+                            "ERRO", JOptionPane.ERROR_MESSAGE);
+
+                } else { //Pode cadastrar
+                    if(this.userController.cadastrar(username, password)) //Tenta cadastrar
+                        JOptionPane.showMessageDialog(tela, username + " cadastrado com sucesso!", "Sucesso",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    else
+                        JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
+                                "ERRO", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         cadastrar.setBounds(xCentralizado, 390, 220, 50);

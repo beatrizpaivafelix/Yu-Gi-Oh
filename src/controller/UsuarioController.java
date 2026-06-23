@@ -10,6 +10,10 @@ public class UsuarioController {
         this.userSQL = new UsuarioDAO();
     }
 
-    public boolean isCadastrado(String username) { return userSQL.getUsuario(username); }
+    public String isCadastrado(String username) { return userSQL.existeUsuario(username); }
+
+    public boolean cadastrar(String username, String password) {
+        return userSQL.insertUsuario(username, password);
+    }
 
 }
