@@ -13,7 +13,7 @@ public class UsuarioDAO {
         try (Connection conexao = ConexaoMySQL.getConnection()) { //Abre conexão com o banco
 
             //Preparando SQL de consulta
-            String sql = "SELECT * FROM usuario WHERE idUsuario = ?;";
+            String sql = "SELECT * FROM usuario WHERE nome = ?;";
             PreparedStatement statement = conexao.prepareStatement(sql);
             statement.setString(1, username);
 
