@@ -10,7 +10,6 @@ public class TelaInicial extends JFrame {
     private final int x = 800, y = 800;
 
     private JPanel painelPrincipal;
-    private JScrollPane painelFundo;
     private HashMap<String, JPanel> historicoPaineis;
     private CardLayout baralhoPaineis;
 
@@ -30,8 +29,7 @@ public class TelaInicial extends JFrame {
 
         //Adiciona painel com scrolling ao JFrame
         this.painelPrincipal = new JPanel(this.baralhoPaineis);
-        this.painelFundo = new JScrollPane(this.painelPrincipal);
-        this.add(this.painelFundo);
+        this.add(this.painelPrincipal);
 
         //Abre a tela inicial do programa
         this.trocarTela("INICIAL", new PainelInicial(this, this.x, this.y));

@@ -22,7 +22,7 @@ public class PainelInicial extends JPanel {
         cadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tela.trocarTela("CADASTRAR", new PainelCadastro(tela, x, y));
+
             }
         });
 
@@ -31,7 +31,7 @@ public class PainelInicial extends JPanel {
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tela.trocarTela("LOGIN", new PainelLogin(tela, x, y));
+
             }
         });
 
@@ -45,19 +45,43 @@ public class PainelInicial extends JPanel {
         });
 
         //Posicionamento dos componentes gráficos
-        titulo.setBounds(this.x/2 - 200, this.y/2 - 200, 420, 50);
+        titulo.setBounds(this.x/2 - 200, 140, 420, 50);
         titulo.setFont(new Font("Arial", Font.PLAIN, 36));
         this.add(titulo);
 
-        cadastrar.setBounds(this.x/2 - 110, this.y/2 - 110, 220, 50);
+        int larguraBotoes = 220;
+        int xCentralizado = (this.x - larguraBotoes) / 2;
+
+        JLabel lblUsuario = new JLabel("Username:");
+        lblUsuario.setFont(new Font("Arial", Font.PLAIN, 30));
+        lblUsuario.setBounds(xCentralizado - 100, 265, larguraBotoes, 25);
+        this.add(lblUsuario);
+
+        JTextField txtUsuario = new JTextField();
+        txtUsuario.setFont(new Font("Arial", Font.PLAIN, 30));
+        txtUsuario.setBounds(xCentralizado + 50, 260, larguraBotoes, 40);
+        add(txtUsuario);
+
+        // 3. Campo: Senha (Label + Input)
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setFont(new Font("Arial", Font.PLAIN, 30));
+        lblSenha.setBounds(xCentralizado - 50, 320, larguraBotoes, 25);
+        add(lblSenha);
+
+        JPasswordField txtSenha = new JPasswordField();
+        txtSenha.setFont(new Font("Arial", Font.PLAIN, 30));
+        txtSenha.setBounds(xCentralizado + 50, 310, larguraBotoes, 40);
+        add(txtSenha);
+
+        cadastrar.setBounds(xCentralizado, 390, 220, 50);
         cadastrar.setFont(new Font("Arial", Font.PLAIN, 30));
         this.add(cadastrar);
 
-        login.setBounds(this.x/2 - 110, this.y/2 - 50, 220, 50);
+        login.setBounds(xCentralizado, 450, 220, 50);
         login.setFont(new Font("Arial", Font.PLAIN, 30));
         this.add(login);
 
-        sair.setBounds(this.x/2 - 110, this.y/2 + 10, 220, 50);
+        sair.setBounds(xCentralizado, 510, 220, 50);
         sair.setFont(new Font("Arial", Font.PLAIN, 30));
         this.add(sair);
     }
