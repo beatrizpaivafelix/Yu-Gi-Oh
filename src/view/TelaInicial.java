@@ -32,7 +32,7 @@ public class TelaInicial extends JFrame {
         this.add(this.painelPrincipal);
 
         //Abre a tela inicial do programa
-        this.trocarTela("INICIAL", new PainelInicial(this, this.x, this.y));
+        this.trocarTela("INICIAL", new PainelInicial(this));
 
         this.setVisible(true); //Mostra o JFrame pronto
     }
@@ -41,7 +41,7 @@ public class TelaInicial extends JFrame {
         Set<String> nomes = this.historicoPaineis.keySet();
 
         //Se o painel não existe, adiciona ao histórico e ao layout
-        if(!nomes.contains(title)) {
+        if(!nomes.contains(title) || title.equals("MENU")) {
             this.historicoPaineis.put(title, painel);
             this.painelPrincipal.add(painel, title);
         }

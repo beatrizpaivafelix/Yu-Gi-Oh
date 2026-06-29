@@ -10,25 +10,22 @@ import java.util.ArrayList;
 public class PainelInicial extends JPanel {
 
     private TelaInicial tela;
-    private int x, y;
-
     private JogadorController jogadorController;
 
-    public PainelInicial(TelaInicial tela, int x, int y) {
+    public PainelInicial(TelaInicial tela) {
         this.tela = tela;
-        this.x = x; this.y = y;
         this.setLayout(null);
 
         this.jogadorController = new JogadorController();
 
         //Posicionamento dos componentes gráficos
         JLabel titulo = new JLabel("Bem vindo ao CardWars!");
-        titulo.setBounds(this.x/2 - 200, 140, 420, 50);
+        titulo.setBounds(400 - 200, 140, 420, 50);
         titulo.setFont(new Font("Arial", Font.PLAIN, 36));
         this.add(titulo);
 
         int larguraBotoes = 220;
-        int xCentralizado = (this.x - larguraBotoes) / 2;
+        int xCentralizado = (800 - larguraBotoes) / 2;
 
         JLabel lblUsuario = new JLabel("Username:");
         lblUsuario.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -98,7 +95,7 @@ public class PainelInicial extends JPanel {
 
         for(Jogador j : jogadores) {
             if(j.getNome().equals(username))
-                this.tela.trocarTela("MENU", new PainelMenu(j, this.tela, this.x, this.y));
+                this.tela.trocarTela("MENU", new PainelMenu(j, this.tela));
         }
     }
 }
