@@ -1,22 +1,21 @@
 package dao;
 
-import model.Usuario;
+import model.Jogador;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UsuarioDAO {
+public class JogadorDAO {
 
     //Retorna se existe um usuário no banco com o nome informado
-    public String existeUsuario(String username) {
+    public String existeJogador(String username) {
         try (Connection conexao = ConexaoMySQL.getConnection()) { //Abre conexão com o banco
 
             //Preparando SQL de consulta
-            String sql = "SELECT * FROM usuario WHERE nome = ?;";
+            String sql = "SELECT * FROM jogador WHERE nome = ?;";
             PreparedStatement statement = conexao.prepareStatement(sql);
             statement.setString(1, username);
 
@@ -30,14 +29,13 @@ public class UsuarioDAO {
     }
 
     //Registra um usuario no banco
-    public boolean insertUsuario(String username, String password) {
+    public boolean insertJogador(String username) {
         try (Connection conexao = ConexaoMySQL.getConnection()) { //Abre conexão com o banco
 
             //Preparando SQL de inserção
-            String sql = "INSERT INTO usuario (nome, senha) VALUES (?, ?);";
+            String sql = "INSERT INTO jogador (nome) VALUES (?);";
             PreparedStatement statement = conexao.prepareStatement(sql);
             statement.setString(1, username);
-            statement.setString(2, password);
 
             statement.executeUpdate(); //Executa a SQL
             return true; //Sucesso na inserção
@@ -49,18 +47,18 @@ public class UsuarioDAO {
     }
 
     //Retorna todos os usuarios do banco
-    public ArrayList<Usuario> getUsuarios() {
+    public ArrayList<Jogador> getJogadores() {
         try (Connection conexao = ConexaoMySQL.getConnection()) {
 
             //Preparando SQL de consulta
-            String sql = "SELECT * FROM usuario;";
+            String sql = "SELECT * FROM jogador;";
             PreparedStatement statement = conexao.prepareStatement(sql);
 
             ResultSet resultados = statement.executeQuery();
-            ArrayList<Usuario> retorno = new ArrayList<>();
+            ArrayList<Jogador> retorno = new ArrayList<>();
 
             while(resultados.next()) {
-                Usuario u = new Usuario(resultados.getString("nome"), resultados.getString("senha"));
+                Jogador u = new Jogador(resultados.getString("nome"));
                 retorno.add(u);
             }
 

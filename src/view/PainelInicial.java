@@ -1,8 +1,8 @@
 package view;
 
-import controller.UsuarioController;
-import model.Usuario;
-import org.mindrot.jbcrypt.BCrypt;
+import controller.JogadorController;
+import model.Jogador;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,14 +12,14 @@ public class PainelInicial extends JPanel {
     private TelaInicial tela;
     private int x, y;
 
-    private UsuarioController userController;
+    private JogadorController jogadorController;
 
     public PainelInicial(TelaInicial tela, int x, int y) {
         this.tela = tela;
         this.x = x; this.y = y;
         this.setLayout(null);
 
-        this.userController = new UsuarioController();
+        this.jogadorController = new JogadorController();
 
         //Posicionamento dos componentes gráficos
         JLabel titulo = new JLabel("Bem vindo ao CardWars!");
@@ -40,99 +40,43 @@ public class PainelInicial extends JPanel {
         txtUsuario.setBounds(xCentralizado + 50, 260, larguraBotoes, 40);
         this.add(txtUsuario);
 
-        // 3. Campo: Senha (Label + Input)
-        JLabel lblSenha = new JLabel("Senha:");
-        lblSenha.setFont(new Font("Arial", Font.PLAIN, 30));
-        lblSenha.setBounds(xCentralizado - 50, 320, larguraBotoes, 25);
-        this.add(lblSenha);
-
-        JPasswordField txtSenha = new JPasswordField();
-        txtSenha.setFont(new Font("Arial", Font.PLAIN, 30));
-        txtSenha.setBounds(xCentralizado + 50, 310, larguraBotoes, 40);
-        this.add(txtSenha);
-
-        //Botão de cadastro
-        JButton cadastrar = new JButton("Cadastrar-se");
-        cadastrar.addActionListener(e -> {
-
-            //Credenciais do usuário
-            String username = txtUsuario.getText();
-            String password = String.valueOf(txtSenha.getPassword());
-
-            //Verificar se os campos estão preenchidos
-            if(username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(tela, "ERRO: Preencha ambos os campos", "ERRO",
-                        JOptionPane.ERROR_MESSAGE);
-
-            } else { //Os campos estão preenchidos
-                String resposta = userController.isCadastrado(username); //Informa se o usuário já existe
-
-                if(resposta.equals("SIM")) { //Não pode cadastrar usuário repetido
-                    JOptionPane.showMessageDialog(tela, "ERRO: " + username + " já está cadastrado",
-                            "ERRO", JOptionPane.ERROR_MESSAGE);
-
-                } else if(resposta.equals("ERRO")) { //SQLException
-                    JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
-                            "ERRO", JOptionPane.ERROR_MESSAGE);
-
-                } else { //Pode cadastrar
-
-                    //Usa a biblioteca externa BCrypt para criptografar a senha
-                    String senhaCriptografada = BCrypt.hashpw(password, BCrypt.gensalt());
-
-                    if(this.userController.cadastrar(username, senhaCriptografada)) //Tenta cadastrar
-                        JOptionPane.showMessageDialog(tela, username + " cadastrado com sucesso!", "Sucesso",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    else
-                        JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
-                                "ERRO", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-        cadastrar.setBounds(xCentralizado, 390, 220, 50);
-        cadastrar.setFont(new Font("Arial", Font.PLAIN, 30));
-        this.add(cadastrar);
-
         //Botão de login
         JButton login = new JButton("Entrar");
         login.addActionListener(e -> {
             //Credenciais do usuário
             String username = txtUsuario.getText();
-            String password = String.valueOf(txtSenha.getPassword());
 
-            //Verificar se os campos estão preenchidos
-            if(username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(tela, "ERRO: Preencha ambos os campos", "ERRO",
+            //Verificar se o campo está preenchido
+            if(username.isEmpty()) {
+                JOptionPane.showMessageDialog(tela, "ERRO: Informe um nome de usuário", "ERRO",
                         JOptionPane.ERROR_MESSAGE);
 
             } else { //Os campos estão preenchidos
-                ArrayList<Usuario> usuarios = this.userController.getUsuarios();
+                ArrayList<Jogador> jogadores = this.jogadorController.getJogadores();
 
-                if(usuarios == null) {
+                if(jogadores == null) { //Erro
                     JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
                             "ERRO", JOptionPane.ERROR_MESSAGE);
 
-                } else if(usuarios.isEmpty()) {
-                    JOptionPane.showMessageDialog(tela, "ERRO: não há usuários cadastrados.",
-                            "ERRO", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    boolean isCadastrado = false;
 
-                } else { //Há pelo menos um usuário cadastrado
-                    boolean logado = false;
-
-                    //Avalia a senha (criptografada) de todos os usuários
-                    for(Usuario u : usuarios) {
-                        if(username.equalsIgnoreCase(u.getNome()) &&
-                                BCrypt.checkpw(password, u.getSenha())) { //Verifica se as senhas são iguais
-
-                            //Credenciais corretas
-                            logado = true;
-                            this.tela.trocarTela("MENU", new PainelMenu(u, this.tela, this.x, this.y));
-                        }
+                    //Verifica se é um novo usuário
+                    for(Jogador j : jogadores) {
+                        if(j.getNome().equals(username)) //Usuário já existente
+                            isCadastrado = true;
                     }
 
-                    if(!logado) //Credenciais incorretas
-                        JOptionPane.showMessageDialog(tela, "ERRO: nome ou senha incorretos",
-                                "ERRO", JOptionPane.ERROR_MESSAGE);
+                    if(!isCadastrado) { //Cadastra antes de entrar
+                        if(!this.jogadorController.cadastrar(username)) { //Erro: Não faz login
+                            JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
+                                    "ERRO", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            fazerLogin(username); //Entra com o username
+                        }
+                    } else {
+                        fazerLogin(username); //Entra com o username
+                    }
                 }
             }
         });
@@ -146,5 +90,15 @@ public class PainelInicial extends JPanel {
         sair.setBounds(xCentralizado, 510, 220, 50);
         sair.setFont(new Font("Arial", Font.PLAIN, 30));
         this.add(sair);
+    }
+
+    //Entra com o username
+    private void fazerLogin(String username) {
+        ArrayList<Jogador> jogadores = this.jogadorController.getJogadores();
+
+        for(Jogador j : jogadores) {
+            if(j.getNome().equals(username))
+                this.tela.trocarTela("MENU", new PainelMenu(j, this.tela, this.x, this.y));
+        }
     }
 }

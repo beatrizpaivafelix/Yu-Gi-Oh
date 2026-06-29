@@ -49,4 +49,8 @@ public class TelaInicial extends JFrame {
         this.baralhoPaineis.show(this.painelPrincipal, title); //Troca de tela
     }
 
+    static void main(String[] args) {
+        TelaInicial tela = new TelaInicial("CardWars");
+    }
+
 }
