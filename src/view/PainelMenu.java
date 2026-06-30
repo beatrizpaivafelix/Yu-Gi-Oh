@@ -1,18 +1,23 @@
 package view;
 
+import controller.JogadorController;
 import model.Jogador;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class PainelMenu extends JPanel {
 
     private Jogador jogador;
     private TelaInicial tela;
+    private JogadorController jogadorController;
 
     public PainelMenu(Jogador jogador, TelaInicial tela) {
         this.jogador = jogador;
         this.tela = tela;
+        this.jogadorController = new JogadorController();
         this.setLayout(null);
 
         // Definição das fontes
@@ -36,7 +41,22 @@ public class PainelMenu extends JPanel {
                 JOptionPane.showMessageDialog(this.tela, "Selecione um baralho na tela de edição para jogar",
                         "ERRO", JOptionPane.ERROR_MESSAGE);
             } else { //Há um baralho ativo
-                //TelaSelecao selecao = new TelaSelecao(this.tela);
+
+                //Obtendo oponentes do banco
+                Vector<Jogador> listaOponentes = this.jogadorController.getOponentes(this.jogador);
+
+                if(listaOponentes == null) { //Erro
+                    JOptionPane.showMessageDialog(this.tela, "ERRO ao conectar-se com o banco de dados",
+                            "ERRO", JOptionPane.ERROR_MESSAGE);
+
+                } else if(listaOponentes.isEmpty()) { //Não há outros jogadores cadastrados
+                    JOptionPane.showMessageDialog(this.tela, "ERRO: não há outros jogadores cadastrados",
+                            "ERRO", JOptionPane.ERROR_MESSAGE);
+
+                } else { //Pode jogar
+
+                    TelaSelecao selecao = new TelaSelecao(this, listaOponentes);
+                }
 
             }
 
@@ -83,8 +103,8 @@ public class PainelMenu extends JPanel {
 
     }
 
-    public void iniciarPartida(Jogador atual, Jogador oponente) {
-
+    public void iniciarPartida(Jogador oponente) {
+        System.out.println("DEU CERTO!");
     }
 
 }

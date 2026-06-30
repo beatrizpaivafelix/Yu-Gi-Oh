@@ -52,7 +52,7 @@ public class PainelInicial extends JPanel {
                 ArrayList<Jogador> jogadores = this.jogadorController.getJogadores();
 
                 if(jogadores == null) { //Erro
-                    JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
+                    JOptionPane.showMessageDialog(tela, "ERRO ao conectar-se com o banco de dados",
                             "ERRO", JOptionPane.ERROR_MESSAGE);
 
                 } else {
@@ -67,7 +67,7 @@ public class PainelInicial extends JPanel {
 
                     if(!isCadastrado) { //Cadastra antes de entrar
                         if(!this.jogadorController.cadastrar(username)) { //Erro: Não faz login
-                            JOptionPane.showMessageDialog(tela, "ERRO: ao conectar-se com o banco de dados",
+                            JOptionPane.showMessageDialog(tela, "ERRO ao conectar-se com o banco de dados",
                                     "ERRO", JOptionPane.ERROR_MESSAGE);
                         } else {
                             fazerLogin(username); //Entra com o username

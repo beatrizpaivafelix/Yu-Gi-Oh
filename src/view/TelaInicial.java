@@ -35,7 +35,6 @@ public class TelaInicial extends JFrame {
         this.trocarTela("INICIAL", new PainelInicial(this));
 
         this.setVisible(true); //Mostra o JFrame pronto
-        TelaSelecao selecao = new TelaSelecao(this);
     }
 
     public void trocarTela(String title, JPanel painel) {

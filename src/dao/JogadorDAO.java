@@ -2,11 +2,9 @@ package dao;
 
 import model.Jogador;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class JogadorDAO {
 
@@ -63,6 +61,31 @@ public class JogadorDAO {
             }
 
             return retorno; //Retorna array com todos os usuarios cadastrados
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    //Retorna todos os jogadores do banco, exceto o jogador atual
+    public Vector<Jogador> getOponentes(Jogador jogador) {
+        try(Connection conexao = ConexaoMySQL.getConnection()) {
+
+            //Preparando SQL
+            String sql = "SELECT * FROM jogador WHERE nome != ?";
+            PreparedStatement statement = conexao.prepareStatement(sql);
+            statement.setString(1, jogador.getNome());
+
+            ResultSet resultados = statement.executeQuery();
+            Vector<Jogador> oponentes = new Vector<>();
+            Jogador j;
+
+            while(resultados.next()) {
+                j = new Jogador(resultados.getString("nome"), resultados.getInt("baralhoAtual"));
+                oponentes.add(j);
+            }
+            return oponentes;
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return null;

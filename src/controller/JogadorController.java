@@ -3,6 +3,7 @@ package controller;
 import dao.JogadorDAO;
 import model.Jogador;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class JogadorController {
 
@@ -20,6 +21,6 @@ public class JogadorController {
 
     public ArrayList<Jogador> getJogadores() { return this.jogadorDAO.getJogadores(); }
 
-    public String[] getOponentes() { return this.jogadorDAO.getOponentes(); }
+    public Vector<Jogador> getOponentes(Jogador j) { return this.jogadorDAO.getOponentes(j); }
 
 }

@@ -18,6 +18,6 @@ public class Jogador {
 
     @Override
     public String toString() {
-        return "Nome: " + this.nome;
+        return this.nome;
     }
 }
