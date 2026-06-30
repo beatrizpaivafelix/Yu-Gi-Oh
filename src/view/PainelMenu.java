@@ -29,6 +29,18 @@ public class PainelMenu extends JPanel {
 
         //Botão para iniciar uma partida
         JButton btnJogar = new JButton("JOGAR");
+        btnJogar.addActionListener(e -> {
+
+            //Verifica se há um baralho ativo
+            if(this.jogador.getBaralhoAtual() == null) {
+                JOptionPane.showMessageDialog(this.tela, "Selecione um baralho na tela de edição para jogar",
+                        "ERRO", JOptionPane.ERROR_MESSAGE);
+            } else { //Há um baralho ativo
+                //TelaSelecao selecao = new TelaSelecao(this.tela);
+
+            }
+
+        });
         btnJogar.setFont(fonteBotoes);
 
         int larguraJogar = 180;
@@ -38,6 +50,9 @@ public class PainelMenu extends JPanel {
 
         //Botão para edição de baralhos
         JButton btnEditar = new JButton("EDITAR BARALHOS");
+        btnEditar.addActionListener(e -> {
+            this.tela.trocarTela("EDITAR", new PainelEdicao(this.tela, this.jogador));
+        });
         btnEditar.setFont(fonteBotoes);
 
         int larguraEdicao = 320;
@@ -67,4 +82,9 @@ public class PainelMenu extends JPanel {
         add(btnSair);
 
     }
+
+    public void iniciarPartida(Jogador atual, Jogador oponente) {
+
+    }
+
 }

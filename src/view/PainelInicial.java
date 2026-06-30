@@ -60,8 +60,9 @@ public class PainelInicial extends JPanel {
 
                     //Verifica se é um novo usuário
                     for(Jogador j : jogadores) {
-                        if(j.getNome().equals(username)) //Usuário já existente
-                            isCadastrado = true;
+                        if (j.getNome().equals(username)) {//Usuário já existente
+                            isCadastrado = true; break;
+                        }
                     }
 
                     if(!isCadastrado) { //Cadastra antes de entrar

@@ -12,12 +12,14 @@ public class JogadorController {
         this.jogadorDAO = new JogadorDAO();
     }
 
-    public String isCadastrado(String username) { return jogadorDAO.existeJogador(username); }
+    public String isCadastrado(String username) { return this.jogadorDAO.existeJogador(username); }
 
     public boolean cadastrar(String username) {
-        return jogadorDAO.insertJogador(username);
+        return this.jogadorDAO.insertJogador(username);
     }
 
-    public ArrayList<Jogador> getJogadores() { return jogadorDAO.getJogadores(); }
+    public ArrayList<Jogador> getJogadores() { return this.jogadorDAO.getJogadores(); }
+
+    public String[] getOponentes() { return this.jogadorDAO.getOponentes(); }
 
 }

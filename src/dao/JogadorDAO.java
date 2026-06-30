@@ -58,7 +58,7 @@ public class JogadorDAO {
             ArrayList<Jogador> retorno = new ArrayList<>();
 
             while(resultados.next()) {
-                Jogador u = new Jogador(resultados.getString("nome"));
+                Jogador u = new Jogador(resultados.getString("nome"), resultados.getInt("baralhoAtual"));
                 retorno.add(u);
             }
 
