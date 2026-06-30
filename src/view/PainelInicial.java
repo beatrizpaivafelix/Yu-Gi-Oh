@@ -96,7 +96,7 @@ public class PainelInicial extends JPanel {
 
         for(Jogador j : jogadores) {
             if(j.getNome().equals(username))
-                this.tela.trocarTela("MENU", new PainelMenu(j, this.tela));
+                this.tela.trocarTela(new PainelMenu(j, this.tela));
         }
     }
 }

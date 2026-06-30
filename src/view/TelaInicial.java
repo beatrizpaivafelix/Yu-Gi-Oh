@@ -3,15 +3,11 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Set;
 
 public class TelaInicial extends JFrame {
 
-    private final int x = 800, y = 800;
-
     private JPanel painelPrincipal;
-    private HashMap<String, JPanel> historicoPaineis;
-    private CardLayout baralhoPaineis;
+    private final int x = 800, y = 800;
 
     public TelaInicial(String title) {
         //Inicializa o novo JFrame
@@ -23,30 +19,24 @@ public class TelaInicial extends JFrame {
         Point centro = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         this.setBounds((centro.x - (this.x/2)), (centro.y - (this.y/2)), this.x, this.y);
 
-        //Inicializa componentes de gerenciamento de telas
-        this.historicoPaineis = new HashMap<>();
-        this.baralhoPaineis = new CardLayout();
-
-        //Adiciona painel com scrolling ao JFrame
-        this.painelPrincipal = new JPanel(this.baralhoPaineis);
+        //Adiciona o painel principal ao JFrame
+        this.painelPrincipal = new JPanel(new BorderLayout());
         this.add(this.painelPrincipal);
 
         //Abre a tela inicial do programa
-        this.trocarTela("INICIAL", new PainelInicial(this));
+        this.trocarTela(new PainelInicial(this));
 
         this.setVisible(true); //Mostra o JFrame pronto
     }
 
-    public void trocarTela(String title, JPanel painel) {
-        Set<String> nomes = this.historicoPaineis.keySet();
+    public void trocarTela(JPanel painel) {
+        //Troca o painel atual pelo novo, centralizado
+        this.painelPrincipal.removeAll();
+        this.painelPrincipal.add(painel, BorderLayout.CENTER);
 
-        //Se o painel não existe, adiciona ao histórico e ao layout
-        if(!nomes.contains(title) || title.equals("MENU")) {
-            this.historicoPaineis.put(title, painel);
-            this.painelPrincipal.add(painel, title);
-        }
-
-        this.baralhoPaineis.show(this.painelPrincipal, title); //Troca de tela
+        //Exibe o novo painel
+        this.painelPrincipal.revalidate();
+        this.painelPrincipal.repaint();
     }
 
     static void main(String[] args) {

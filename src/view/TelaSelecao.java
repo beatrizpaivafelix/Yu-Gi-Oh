@@ -1,6 +1,5 @@
 package view;
 
-import controller.JogadorController;
 import model.Jogador;
 import javax.swing.*;
 import java.awt.*;
@@ -9,12 +8,10 @@ import java.util.Vector;
 public class TelaSelecao extends JFrame {
 
     private PainelMenu tela;
-    private JogadorController jogadorController;
     private Vector<Jogador> listaOponentes;
 
     public TelaSelecao(PainelMenu tela, Vector<Jogador> listaOponentes)  {
         this.tela = tela;
-        this.jogadorController = new JogadorController();
         this.listaOponentes = listaOponentes;
 
         int x = 500;

@@ -54,12 +54,9 @@ public class PainelMenu extends JPanel {
                             "ERRO", JOptionPane.ERROR_MESSAGE);
 
                 } else { //Pode jogar
-
-                    TelaSelecao selecao = new TelaSelecao(this, listaOponentes);
+                    new TelaSelecao(this, listaOponentes); //Abre a tela de seleção de adversários
                 }
-
             }
-
         });
         btnJogar.setFont(fonteBotoes);
 
@@ -71,7 +68,7 @@ public class PainelMenu extends JPanel {
         //Botão para edição de baralhos
         JButton btnEditar = new JButton("EDITAR BARALHOS");
         btnEditar.addActionListener(e -> {
-            this.tela.trocarTela("EDITAR", new PainelEdicao(this.tela, this.jogador));
+            this.tela.trocarTela(new PainelEdicao(this.tela, this.jogador));
         });
         btnEditar.setFont(fonteBotoes);
 
@@ -92,7 +89,7 @@ public class PainelMenu extends JPanel {
         // 5. Botão: SAIR
         JButton btnSair = new JButton("SAIR");
         btnSair.addActionListener(e -> {
-            this.tela.trocarTela("INICIAL", new PainelInicial(this.tela));
+            this.tela.trocarTela(new PainelInicial(this.tela));
         });
 
         btnSair.setFont(fonteBotoes);
