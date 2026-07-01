@@ -50,4 +50,9 @@ public class CartaDAO {
         }
     }
 
+    //Retorna todas as cartas de um baralho
+    public ArrayList<Carta> getCartasBaralho() {
+        return null;
+    }
+
 }

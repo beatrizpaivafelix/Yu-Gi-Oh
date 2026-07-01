@@ -6,7 +6,12 @@ import model.Baralho;
 import model.Carta;
 import model.Jogador;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class PainelEdicao extends JPanel {
 
@@ -43,6 +48,7 @@ public class PainelEdicao extends JPanel {
         // Definição das fontes
         Font fonteTitulos = new Font("Arial", Font.PLAIN, 22);
         Font fonteBotoes = new Font("Arial", Font.PLAIN, 18);
+        Font fonteListas = new Font("Arial", Font.PLAIN, 18);
 
         //Coluna 1 (Esquerda)
         JLabel lblBaralhos = new JLabel("Baralhos", SwingConstants.LEFT);
@@ -52,6 +58,10 @@ public class PainelEdicao extends JPanel {
 
         this.modeloBaralhos = new DefaultListModel<>();
         this.listBaralhos = new JList<>(this.modeloBaralhos);
+        this.listBaralhos.setFont(fonteListas);
+
+        preencheListaBaralhos(); //Adiciona os baralhos do banco
+
         JScrollPane scrollBaralhos = new JScrollPane(this.listBaralhos);
         scrollBaralhos.setBounds(30, 55, 220, 560);
         this.add(scrollBaralhos);
@@ -69,6 +79,8 @@ public class PainelEdicao extends JPanel {
 
         this.modeloCartasBaralho = new DefaultListModel<>();
         this.listCartasBaralho = new JList<>(this.modeloCartasBaralho);
+        this.listCartasBaralho.setFont(fonteListas);
+
         JScrollPane scrollCartasBaralho = new JScrollPane(this.listCartasBaralho);
         scrollCartasBaralho.setBounds(280, 55, 220, 300);
         this.add(scrollCartasBaralho);
@@ -97,9 +109,13 @@ public class PainelEdicao extends JPanel {
 
         this.modeloTodasCartas = new DefaultListModel<>();
         this.listTodasCartas = new JList<>(this.modeloTodasCartas);
+        this.listTodasCartas.setFont(fonteListas);
+
         JScrollPane scrollTodasCartas = new JScrollPane(this.listTodasCartas);
         scrollTodasCartas.setBounds(530, 55, 240, 560);
         this.add(scrollTodasCartas);
+
+        preencheTodasCartas(); //Adiciona as cartas do banco
 
         this.btnSalvar = new JButton("SALVAR");
         this.btnSalvar.setFont(fonteBotoes);
@@ -117,8 +133,41 @@ public class PainelEdicao extends JPanel {
         configurarEventos();
     }
 
+    private void preencheListaBaralhos() {
+        ArrayList<Baralho> baralhos = this.baralhoController.getBaralhos(this.jogador);
+    }
+
+    private void preencheTodasCartas() {
+        ArrayList<Carta> cartas = this.cartaController.getCartas();
+
+        if(cartas == null) { //Erro
+            JOptionPane.showMessageDialog(this.tela, "ERRO ao conectar-se com o banco. Tente novamente mais tarde",
+                    "ERRO", JOptionPane.ERROR_MESSAGE);
+        } else {
+            for(Carta c : cartas) {
+                this.modeloTodasCartas.addElement(c);
+            }
+        }
+    }
+
     private void configurarEventos() {
-        //
+
+        //Botão para criar um novo baralho
+        this.btnNovoBaralho.addActionListener(e -> {
+            Baralho b = new Baralho("Novo Baralho", new ArrayList<Carta>(), false);
+            this.modeloBaralhos.addElement(b);
+        });
+
+        //Evento de selecionar um baralho
+        this.listBaralhos.addListSelectionListener(e -> {
+            Baralho baralhoSelecionado = this.listBaralhos.getSelectedValue();
+            ArrayList<Carta> cartasBaralho = baralhoSelecionado.getCartas();
+
+            //Atualiza a lista de cartas do baralho atual
+            this.modeloCartasBaralho.removeAllElements();
+            this.modeloCartasBaralho.addAll(cartasBaralho);
+        });
+
     }
 
 }
