@@ -21,7 +21,7 @@ public class PainelMenu extends JPanel {
         this.setLayout(null);
 
         // Definição das fontes
-        Font fonteBotoes = new Font("Arial", Font.PLAIN, 28);
+        Font fonteBotoes = new Font("Arial", Font.PLAIN, 30);
 
         // Base de largura para o cálculo de centralização (X)
         int larguraTela = this.tela.getWidth();

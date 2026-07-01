@@ -7,4 +7,9 @@ public abstract class Carta {
     public String getNome() { return nome; }
 
     public String getDescricao() { return descricao; }
+
+    @Override
+    public String toString() {
+        return this.nome;
+    }
 }
